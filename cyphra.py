@@ -1,3 +1,4 @@
+import logging
 class Chatbot:
     def __init__(self, name):
         self.name = name
@@ -5,14 +6,15 @@ class Chatbot:
     def response(self, user_input):
         user_input = user_input.lower()
         if user_input == "hello":
-            return "Hi, how can i help you today"
+            reply = "Hi, how can i help you today"
         elif user_input == "who are you":
-            return f"i am {self.name} an automated chatbot..."
+            reply = f"i am {self.name} an automated chatbot..."
         elif user_input == "bye":
-            return "good bye and have a nice day ahead.."
+            reply = "good bye and have a nice day ahead.."
         else:
-            return "Sorry but this is beyond my scope for now... "
-            logging.info(f"unrecognized input from user: {user_input}")
+            logging.info(f"unrecognizedinput from user: {user_input!r}")
+            reply = "Sorry but this is beyond my scope for now... "
+        return reply
 
         
 
