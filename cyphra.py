@@ -12,6 +12,7 @@ class Chatbot:
             return "good bye and have a nice day ahead.."
         else:
             return "Sorry but this is beyond my scope for now... "
+            logging.info(f"unrecognized input from user: {user_input}")
 
         
 
