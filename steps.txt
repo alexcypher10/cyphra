@@ -1,0 +1,93 @@
+CYPHRA — ROADMAP STATUS
+========================
+
+PHASE 0: FOUNDATIONS
+[x] Rule-based chatbot basics
+[x] OOP structure
+[x] JSON handling
+[x] Basic API calls
+STATUS: DONE
+
+PHASE 1: ROBUST API HANDLING
+[ ] Add try/except around all API calls (network errors, timeouts, bad responses)
+[ ] Handle rate limits / retries with backoff
+[ ] Validate API response before using it
+[ ] Log errors instead of just printing
+STATUS: NOT STARTED (no API calls exist yet — blocked on Phase 7)
+NOTE: try/except + logging were built, but for the CLI input loop, not an API
+
+PHASE 2: PROJECT STRUCTURE + VENV
+[x] Create virtual environment, requirements.txt
+[x] Add .gitignore
+[x] Init Git repo, first commit
+[ ] Set up proper folder structure (src/, tests/, config/)
+[ ] Add README.md
+STATUS: IN PROGRESS
+
+PHASE 3: DATABASE FUNDAMENTALS (PostgreSQL)
+[ ] Install/configure PostgreSQL locally
+[ ] Learn basic SQL (CREATE, INSERT, SELECT, JOIN)
+[ ] Design schema: users, conversations, messages
+[ ] Connect Python to Postgres (psycopg2 or SQLAlchemy)
+STATUS: NOT STARTED (install in progress)
+
+PHASE 4: CONVERSATION HISTORY STORAGE
+[ ] Save each message (user + bot) to DB
+[ ] Load past conversation on session start
+[ ] Implement basic memory retrieval (last N messages)
+STATUS: NOT STARTED
+
+PHASE 5: REST API LAYER (Flask or FastAPI)
+[ ] Design endpoints: /chat, /history, /users
+[ ] Wire chatbot engine into API routes
+[ ] Test endpoints with Postman/curl
+STATUS: NOT STARTED
+
+PHASE 6: AUTHENTICATION
+[ ] User registration/login
+[ ] Password hashing (bcrypt)
+[ ] JWT-based session auth
+STATUS: NOT STARTED
+
+PHASE 7: LLM INTEGRATION
+[ ] Connect to real LLM API (context window management)
+[ ] Prompt construction from stored history
+[ ] Token limit handling
+STATUS: NOT STARTED
+
+PHASE 8: ADVANCED MEMORY
+[ ] Long-term memory (summarization or vector store)
+[ ] Context relevance filtering
+STATUS: NOT STARTED
+
+PHASE 9: FRONTEND (React)
+[ ] Chat UI, message list, input box
+[ ] Connect to backend API
+[ ] Auth flow in UI
+STATUS: NOT STARTED
+
+PHASE 10: PRODUCTION HARDENING
+[ ] Input validation/sanitization
+[ ] Rate limiting, security headers
+[ ] Environment configs (dev/prod)
+STATUS: NOT STARTED
+
+PHASE 11: TESTING
+[ ] Unit tests (pytest)
+[ ] Integration tests for API
+[ ] CI pipeline (GitHub Actions)
+STATUS: NOT STARTED
+
+PHASE 12: DOCKER + DEPLOYMENT
+[ ] Dockerfile + docker-compose (app + Postgres)
+[ ] Deploy to a host (Render/Railway/Fly.io/VPS)
+STATUS: NOT STARTED
+
+PHASE 13: ADVANCED ARCHITECTURE
+[ ] Admin system
+[ ] Monitoring/logging (structured logs, uptime)
+[ ] Scaling considerations
+STATUS: NOT STARTED
+
+CURRENT POSITION: Finishing Phase 2 (folder structure, README) +
+resuming Phase 3 (PostgreSQL install, mid-task)

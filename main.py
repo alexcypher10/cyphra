@@ -1,5 +1,5 @@
 import logging
-from cyphra import Chatbot
+from src.cyphra import Chatbot
 bot = Chatbot("cyphra")
 
 logging.basicConfig(
