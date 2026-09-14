@@ -11,7 +11,7 @@ PostgreSQL database integration
 API-based architecture
 Fast and scalable backend
 Environment-based configuration
-Modular and maintainable codebase
+Modular and maintainable codebase1
 Ready for deployment
 
 TECH STACK

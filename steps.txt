@@ -20,16 +20,15 @@ PHASE 2: PROJECT STRUCTURE + VENV
 [x] Create virtual environment, requirements.txt
 [x] Add .gitignore
 [x] Init Git repo, first commit
-[ ] Set up proper folder structure (src/, tests/, config/)
-[ ] Add README.md
-STATUS: IN PROGRESS
+[X] Set up proper folder structure (src/, tests/, config/)
+STATUS: DONE
 
 PHASE 3: DATABASE FUNDAMENTALS (PostgreSQL)
-[ ] Install/configure PostgreSQL locally
-[ ] Learn basic SQL (CREATE, INSERT, SELECT, JOIN)
-[ ] Design schema: users, conversations, messages
-[ ] Connect Python to Postgres (psycopg2 or SQLAlchemy)
-STATUS: NOT STARTED (install in progress)
+[X] Install/configure PostgreSQL locally
+[X] Learn basic SQL (CREATE, INSERT, SELECT, JOIN)
+[X] Design schema: users, conversations, messages
+[X] Connect Python to Postgres (psycopg2 or SQLAlchemy)
+STATUS: DONE
 
 PHASE 4: CONVERSATION HISTORY STORAGE
 [ ] Save each message (user + bot) to DB
