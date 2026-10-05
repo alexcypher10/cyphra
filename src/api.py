@@ -36,3 +36,8 @@ def chat (request: ChatRequest):
     return{
         "reply": reply,
         "conversation_id": conversation_id}
+
+@app.get("/history/{conversation_id}")
+def history(conversation_id: int):
+    messages = get_message(conversation_id)
+    return {"messages": messages}

@@ -31,14 +31,14 @@ PHASE 3: DATABASE FUNDAMENTALS (PostgreSQL)
 STATUS: DONE
 
 PHASE 4: CONVERSATION HISTORY STORAGE
-[ ] Save each message (user + bot) to DB
-[ ] Load past conversation on session start
+[X] Save each message (user + bot) to DB
+[X] Load past conversation on session start
 [ ] Implement basic memory retrieval (last N messages)
 STATUS: NOT STARTED
 
 PHASE 5: REST API LAYER (Flask or FastAPI)
-[ ] Design endpoints: /chat, /history, /users
-[ ] Wire chatbot engine into API routes
+[X] Design endpoints: /chat, /history, /users
+[X] Wire chatbot engine into API routes
 [ ] Test endpoints with Postman/curl
 STATUS: NOT STARTED
 

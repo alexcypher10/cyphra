@@ -59,8 +59,8 @@ def get_message(conversation_id):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
-        "SELECT sender, message, created_at FROM messages WHERE conversation_id = %s ORDER BY created at",
-        (conversation_id)
+        "SELECT sender, message, created_at FROM messages WHERE conversation_id = %s ORDER BY created_at",
+        (conversation_id,)
     )
 
     results = cur.fetchall()
