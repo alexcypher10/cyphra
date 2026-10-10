@@ -29,7 +29,7 @@ existing_user = get_user_by_username("cypher")
 if existing_user:
      user_id = existing_user[0]
 else:
-     user_id = create_user("cypher","cypher@gmail.com")
+     user_id = create_user("cypher","cypher@gmail.com", hash_password ("placeholder123"))
 
 conversation_id = start_conversation(user_id)
             

@@ -1,6 +1,7 @@
 import psycopg2
 from dotenv import load_dotenv
 import os
+import bcrypt
 
 load_dotenv()
 
@@ -14,11 +15,13 @@ def get_connection():
         port=os.getenv("db_port")
     )
 # stores each users details in the database
-def create_user(username, email):
+def create_user(username, email, password_hash):
     conn = get_connection()
     cur = conn.cursor()
+
     cur.execute(
-        "INSERT INTO users (username, email) VALUES (%s, %s) RETURNING id", (username, email) 
+        "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s) RETURNING id",
+        (username, email, password_hash)
     )
     user_id = cur.fetchone()[0]
 
@@ -84,5 +87,10 @@ def get_user_by_username(username):
     return result
 
 
+def hash_password(password):
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return hashed.decode('utf-8')
 
-    
+
+def check_password(password, hashed_password):
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
