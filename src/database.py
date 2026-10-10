@@ -77,7 +77,7 @@ def get_user_by_username(username):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
-        "SELECT id FROM users WHERE username = %s", (username,)
+        "SELECT id, password_hash FROM users WHERE username = %s", (username,)
     
     )
     result = cur.fetchone()

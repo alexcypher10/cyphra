@@ -1,7 +1,10 @@
 from fastapi import FastAPI
+from fastapi import HTTPException
 from pydantic import BaseModel
 from src.cyphra import *
 from src.database import *
+
+
 
 app = FastAPI()
 bot = Chatbot("Cyphra")
@@ -53,5 +56,22 @@ def register(request: RegisterRequest):
     hashed = hash_password(request.password)
     user_id = create_user(request.username, request.email, hashed)
     return{"message": "Registration complete. ", "user_id": user_id}
-    
+
+class loginRequest(BaseModel):
+    username : str
+    password : str
+
+@app.post("/login")
+def login(request: loginRequest):
+    user= get_user_by_username(request.username)
+    if not user:
+        raise HTTPException(status_code=401, detail="imvalid username or password")
+
+    user_id, hash_password = user
+
+    if not check_password(request.password, hash_password):
+        raise HTTPException(status_code=401, detail="imvalid username or password")
+
+    return 
+
     
