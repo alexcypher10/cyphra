@@ -39,12 +39,12 @@ STATUS: NOT STARTED
 PHASE 5: REST API LAYER (Flask or FastAPI)
 [X] Design endpoints: /chat, /history, /users
 [X] Wire chatbot engine into API routes
-[ ] Test endpoints with Postman/curl
+[X] Test endpoints with Postman/curl
 STATUS: NOT STARTED
 
 PHASE 6: AUTHENTICATION
-[ ] User registration/login
-[ ] Password hashing (bcrypt)
+[X] User registration/login
+[X] Password hashing (bcrypt)
 [ ] JWT-based session auth
 STATUS: NOT STARTED
 

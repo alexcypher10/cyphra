@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 from src.cyphra import *
 from src.database import *
+from src.auth import *
 
 
 
@@ -19,14 +20,8 @@ def read_ot() :
 
 
 @app.post("/chat")
-def chat (request: ChatRequest):
+def chat (request: ChatRequest, user_id: int = Depends(get_current_user)):
     if request.conversation_id is None:
-        exisiting_user = get_user_by_username("cypher")
-        if exisiting_user:
-            user_id = exisiting_user[0]
-        else:
-            user_id = create_user("cypher", "cypher@example.com", hash_password("placeholder123"))
-
         conversation_id = start_conversation(user_id)
     else:
         conversation_id =request.conversation_id
@@ -55,7 +50,9 @@ class RegisterRequest(BaseModel):
 def register(request: RegisterRequest):
     hashed = hash_password(request.password)
     user_id = create_user(request.username, request.email, hashed)
-    return{"message": "Registration complete. ", "user_id": user_id}
+    return{
+        "message": "Registration complete. ",
+        "user_id": user_id}
 
 class loginRequest(BaseModel):
     username : str
@@ -71,7 +68,10 @@ def login(request: loginRequest):
 
     if not check_password(request.password, hash_password):
         raise HTTPException(status_code=401, detail="imvalid username or password")
+    token = create_access_token(user_id)
 
-    return 
-
-    
+    return {
+        "message": "login sucessfull",
+        "access_token": token,
+        "user_id": user_id}
+ 
