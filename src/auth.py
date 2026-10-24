@@ -15,7 +15,9 @@ JWT_SECRET = os.getenv("JWT_SECRET")
 if not JWT_SECRET:
     raise RuntimeError("JWT_SECRET is not configured")
 
+
 def create_access_token(user_id):
+    # creates a token to a user that logs in
     now = datetime.now(timezone.utc)
 
     payload = {
@@ -36,6 +38,7 @@ def create_access_token(user_id):
 
 
 def get_current_user(
+    # checks users token for expiration and validity
     credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
 

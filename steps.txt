@@ -45,7 +45,10 @@ STATUS: NOT STARTED
 PHASE 6: AUTHENTICATION
 [X] User registration/login
 [X] Password hashing (bcrypt)
-[ ] JWT-based session auth
+[X] JWT-based session auth
+[ ] Protect /history 
+[ ] Google OAuth login
+[ ] Email verrification
 STATUS: NOT STARTED
 
 PHASE 7: LLM INTEGRATION

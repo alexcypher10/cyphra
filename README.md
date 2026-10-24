@@ -129,6 +129,6 @@ it isn't just a chatbot
     its the beginning of an AI system built to evolve.
 
 AUTHOR
-Cypher Prime
+Cypheruvic
 Software ENgineering student & Python Developer
          

@@ -2,20 +2,23 @@ import psycopg2
 from dotenv import load_dotenv
 import os
 import bcrypt
+from email.mime.text import MIMEText
 
 load_dotenv()
 
-# calls on the database
+ 
 def get_connection():
+    # calls on the database
     return psycopg2.connect(
         dbname=os.getenv("db_name"),
         user=os.getenv("db_user"),
         password=os.getenv("db_password"),
-        host=os.getenv("db_host"),
+        host=os.getenv("db_host"),                  
         port=os.getenv("db_port")
     )
-# stores each users details in the database
+
 def create_user(username, email, password_hash):
+    # stores each users details in the database
     conn = get_connection()
     cur = conn.cursor()
 
@@ -31,8 +34,9 @@ def create_user(username, email, password_hash):
 
     return user_id
 
-# Stores users conversations in the database
+
 def start_conversation(user_id):
+    # Stores users conversations in the database
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
@@ -45,8 +49,9 @@ def start_conversation(user_id):
 
     return conversation_id
 
-# saves users conversation in the database
+
 def save_message(conversation_id, sender, message):
+    # saves users conversation in the database
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
@@ -57,8 +62,9 @@ def save_message(conversation_id, sender, message):
     cur.close()
     conn.close()
 
-# This gets messages stored about specific users
+
 def get_message(conversation_id):
+    # This gets messages stored about specific users
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
@@ -72,12 +78,13 @@ def get_message(conversation_id):
     conn.close()
     return results
 
-# this gets unique usernames from the users table
+
 def get_user_by_username(username):
+    # this gets unique usernames from the users table
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
-        "SELECT id, password_hash FROM users WHERE username = %s", (username,)
+        "SELECT id, password_hash, verification_code, code_expires_at, is_verified  FROM users WHERE username = %s", (username,)
     
     )
     result = cur.fetchone()
@@ -86,8 +93,45 @@ def get_user_by_username(username):
     conn.close()
     return result
 
+def mark_user_verified(user_id):
+    # verifies user's code with the database
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE users SET is_verified = TRUE, verification_code = NULL, code_expires_at = NULL WHERE id = %s ", (user_id,)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def get_conversation(conversation_id):
+    # checks if conversation relates to user via the user id
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+       "SELECT user_id FROM conversations WHERE id = %s", (conversation_id,)
+    )
+    result = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    return result[0] if result else None
+
+def send_verification_code(user_id, code, expires_at):
+    # sends code to the database for checking
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE users SET verification_code = %s, code_expires_at = %s WHERE id =%s",
+        (code, expires_at, user_id) )
+    conn.commit()
+    cur.close()
+    conn.close()
+    
 
 def hash_password(password):
+    # stores user password in hashed format 
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     return hashed.decode('utf-8')
 

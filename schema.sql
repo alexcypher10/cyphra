@@ -21,3 +21,7 @@ CREATE TABLE messages(
 	created_at TIMESTAMP DEFAULT CURRENT_TIMES
 	
 );
+DELETE FROM users;
+SELECT username, verification_code, code_expires_at, is_verified FROM users WHERE username = 'cypher';
+
+ALTER TABLE users ALTER COLUMN code_expires_at TYPE TIMESTAMP(0);
