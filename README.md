@@ -174,7 +174,7 @@ Cyphra is more than a chatbot. It's the foundation of an AI system built to evol
 
 ## Author
 
-Cypheruvic — Software Engineering student and Python developer
+Cypher — Software Engineering student and Python developer
 FUTURE PLANS
 Cyphra is designed to grow over time.
 planned improvments include:
