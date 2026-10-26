@@ -1,114 +1,182 @@
-CYPHRA
+# Cyphra
 
-Cyphra is an AI chatbot project built with python and designed to provide intelligent, conversational interactions while being extensible enough to grow into a powerful personal AI assistant.
+Cyphra is an AI chatbot backend built with Python, FastAPI and PostgreSQL. It provides user accounts, email verification, JWT authentication and persistent conversation storage, and is designed to grow into a full AI assistant.
 
-EXPECTED FEATURES
-AI-powered conversaations
-Context-aware responses
-User management
-Persistent conversation storage
-PostgreSQL database integration
-API-based architecture
-Fast and scalable backend
-Environment-based configuration
-Modular and maintainable codebase1
-Ready for deployment
+## Features
 
-TECH STACK
-Backend
-  python
-  flask
+- User registration with bcrypt-hashed passwords
+- Email verification codes
+- JWT (Bearer token) authentication
+- Persistent conversations and message history
+- Per-user access control (users can only read their own conversations)
+- Auto-generated interactive API docs
 
-Database
-  PostgreSQL
+## Tech Stack
 
-AI
-  large language model(LLM)
+- **Backend:** Python, FastAPI, Uvicorn
+- **Database:** PostgreSQL (psycopg2)
+- **Auth:** bcrypt, PyJWT
+- **Email:** smtplib (Gmail SMTP)
+- **Tools:** Git, GitHub, Python virtual environment
+- **Planned deployment:** Railway
 
-Deployment Tools
-  Git
-  Github
-  Railway
-  python virtual Environment.
+## Project Structure
 
-PROJECT STRUCTURE
-    src/
-        __init__.py
-        cyphra.py
-    main.py
-    tests/
-        __init__.py
-    .env
-    .gitignore
-    requirements.txt
-    README.md
-    LICENSE
+```
+cyphra/
+├── src/
+│   ├── __init__.py
+│   ├── api.py            # FastAPI routes
+│   ├── auth.py           # JWT creation and verification
+│   ├── cyphra.py         # Chatbot engine
+│   ├── database.py       # PostgreSQL access functions
+│   └── mail_service.py   # Verification code generation and email
+├── tests/
+│   └── __init__.py
+├── main.py               # Terminal (CLI) interface
+├── schema.sql            # Database schema
+├── requirements.txt
+├── .env.example
+├── .gitignore
+└── README.md
+```
 
-INSTALLATION
-Clone the repository
+## Installation
+
+```bash
 git clone https://github.com/alexcypher10/cyphra.git
-
-Navigate into the project
 cd cyphra
-
-Create a virtual environment
 python -m venv venv
+```
 
-Activate the virtual environment
-Windows powershell
-    venv\scripts\Activate.ps1
+Activate the virtual environment:
 
-Windows CMD
-    venv\scripts\activate
+```bash
+# Windows PowerShell
+venv\Scripts\Activate.ps1
 
-Install dependencies
-pip install -r requirements.txt
-
-ENVIRONMENT VARIABLES
-create a .env file root in the root directory:
-
-DATABASE_URL=
-AI_API_KEY=
-SECRET_KEY=
-
-.env is included in the gitignore
-.env
-venv/.
-__pycache__/
-*.pyc
-
-DATABASE
-Cyphra uses PostgreSQL for persistent data storage.
-The database can be used be used to store information such as:
-User account
-Conversations
-Messages
-Conversation History
-User preferences
-Application data
-
-RUNNING CYPHRA
-Activate your virtual environment first:
+# Windows CMD
 venv\Scripts\activate
-Then start the application:
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Environment Variables
+
+Create a `.env` file in the project root (see `.env.example`):
+
+```
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=localhost
+DB_PORT=5432
+JWT_SECRET=
+GMAIL_ADDRESS=
+APP_PASSWORD=
+```
+
+`APP_PASSWORD` is a Gmail App Password, not your normal Gmail password. `.env` is listed in `.gitignore` and must never be committed.
+
+## Database Setup
+
+1. Create a PostgreSQL database (for example `cyphra_db`).
+2. Run `schema.sql` against it to create the `users`, `conversations` and `messages` tables.
+
+## Running Cyphra
+
+Start the API server:
+
+```bash
+uvicorn src.api:app --reload
+```
+
+The API runs at `http://127.0.0.1:8000`. Interactive documentation is at `http://127.0.0.1:8000/docs`.
+
+To use the terminal version instead:
+
+```bash
 python main.py
-The flask development server should then start locally.
+```
 
-TESTING
-Run the test suite with:
+## API Reference
 
+All request and response bodies are JSON. Errors return `{"detail": "message"}`.
+
+### Authentication flow
+
+1. `POST /register` creates the account and emails a 6-digit code.
+2. `POST /verify` confirms the code.
+3. `POST /login` returns an `access_token`.
+4. Send the token on protected routes: `Authorization: Bearer <access_token>`. Tokens expire after 1 hour.
+
+### Endpoints
+
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| GET | `/` | No | Health check |
+| POST | `/register` | No | Create an account |
+| POST | `/verify` | No | Verify email with code |
+| POST | `/login` | No | Get an access token |
+| POST | `/chat` | Bearer | Send a message |
+| GET | `/history/{conversation_id}` | Bearer | Get a conversation's messages |
+
+**POST /register**
+```json
+{ "username": "alex", "email": "alex@example.com", "password": "secret123" }
+```
+Returns `{ "message": "...", "user_id": 1 }`. A 6-digit code is emailed (expires after 10 minutes).
+
+**POST /verify**
+```json
+{ "username": "alex", "code": "483921" }
+```
+`code` must be sent as a **string**. Errors: `404` user not found, `400` invalid or expired code.
+
+**POST /login**
+```json
+{ "username": "alex", "password": "secret123" }
+```
+Returns `{ "message": "...", "access_token": "eyJ...", "user_id": 1 }`. Error: `401` invalid username or password.
+
+**POST /chat** (Bearer token required)
+```json
+{ "message": "hello", "conversation_id": null }
+```
+Omit `conversation_id` (or send `null`) to start a new conversation. Send an existing ID to continue one. Returns `{ "reply": "...", "conversation_id": 12 }`. Save the `conversation_id` and send it with the next message. Error: `401` missing or invalid token.
+
+**GET /history/{conversation_id}** (Bearer token required)
+
+Returns `{ "messages": [["user", "hello", "<timestamp>"], ["bot", "Hi...", "<timestamp>"]] }`, ordered oldest to newest. Errors: `401` bad token, `403` not your conversation, `404` conversation not found.
+
+## Testing
+
+```bash
 pytest
+```
 
-DEVELOPMENT WORKFLOW
-A typical development workflow looks like:
-write code - test locally - git add - git commit - git push - github - deployment 
-Example
-git add .
-git commit -m "Notes"
-git push origin main
+## Roadmap
 
+- Google sign-in (OAuth)
+- LLM integration for real AI responses
+- Long-term memory and user preferences
+- Web frontend (HTML/CSS/JavaScript)
+- Docker and deployment (Railway)
+- Rate limiting and production hardening
+
+## Goal
+
+Cyphra is more than a chatbot. It's the foundation of an AI system built to evolve: one that understands users, maintains conversation context, works with stored data, and keeps gaining new capabilities.
+
+## Author
+
+Cypheruvic — Software Engineering student and Python developer
 FUTURE PLANS
-Cyphra is designed to grow aover time.
+Cyphra is designed to grow over time.
 planned improvments include:
     voice conversations
     image understanding
@@ -129,6 +197,6 @@ it isn't just a chatbot
     its the beginning of an AI system built to evolve.
 
 AUTHOR
-Cypheruvic
+Cypher
 Software ENgineering student & Python Developer
          
