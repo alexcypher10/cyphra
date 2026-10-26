@@ -1,2 +1,2 @@
-# cyphra
-A Ai chatbot 
+# Cyphra
+An Ai chatbot 
