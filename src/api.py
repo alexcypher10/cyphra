@@ -89,10 +89,14 @@ def login(request: loginRequest):
     if not user:
         raise HTTPException(status_code=401, detail="imvalid username or password")
 
-    user_id, hash_password = user
+    user_id, hash_password, verification_code, code_expires_at, is_verified = user
 
     if not check_password(request.password, hash_password):
-        raise HTTPException(status_code=401, detail="imvalid username or password")
+        raise HTTPException(status_code=401, detail="invalid username or password")
+
+    if not is_verified:
+        raise HTTPException(status_code=403, detail="please veridy your email first")
+    
     token = create_access_token(user_id)
 
     return {
@@ -124,3 +128,11 @@ def verify (request: verifyRequest):
     mark_user_verified(user_id)
     return {"message": "Account Verified sucessfully"}
 
+@app.get("/conversations")
+# allows logged in users to retrieve their conversations
+def list_conversations(user_id: int = Depends(get_current_user)):
+    rows = get_user_conversations(user_id)
+    return{
+        "conversations": [{"id": r[0], "started_at": r[1], "preview": r[2]}
+        for r in rows]
+    }

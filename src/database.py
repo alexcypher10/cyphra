@@ -129,6 +129,19 @@ def send_verification_code(user_id, code, expires_at):
     cur.close()
     conn.close()
     
+def get_user_conversations(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """SELECT c.id, c.started_at,
+        (SELECT m.message FROM messages m WHERE m.conversation_id = c.id AND m.sender = 'user' ORDER BY m.created_at LIMIT 1) 
+        AS preview FROM conversations c WHERE c.user_id = %s ORDER BY c.started_at DESC""", (user_id,)
+        
+    )
+    results = cur.fetchall()
+    cur.close()
+    conn.close()
+    return results
 
 def hash_password(password):
     # stores user password in hashed format 

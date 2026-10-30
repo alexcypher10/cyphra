@@ -27,5 +27,3 @@ def send_verification_email(to_email, code):
         server.login(sender, password)
         server.sendmail(sender, to_email, msg.as_string())
 
-print ("DEBUG EMAIL:", repr(os.getenv("GMAIL_ADDRESS")))
-print("DEBUG PASSWORD LENGTH:", len(os.getenv("APP_PASSWORD")) or "")
