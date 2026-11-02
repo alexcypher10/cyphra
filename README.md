@@ -124,6 +124,7 @@ All request and response bodies are JSON. Errors return `{"detail": "message"}`.
 | POST | `/login` | No | Get an access token |
 | POST | `/chat` | Bearer | Send a message |
 | GET | `/history/{conversation_id}` | Bearer | Get a conversation's messages |
+| GET | `/conversations `| Bearer | get conversation history
 
 **POST /register**
 ```json
@@ -152,6 +153,9 @@ Omit `conversation_id` (or send `null`) to start a new conversation. Send an exi
 **GET /history/{conversation_id}** (Bearer token required)
 
 Returns `{ "messages": [["user", "hello", "<timestamp>"], ["bot", "Hi...", "<timestamp>"]] }`, ordered oldest to newest. Errors: `401` bad token, `403` not your conversation, `404` conversation not found.
+
+**GET /conversations** (Bearer token required)
+Returns `{"conversations": [{"id": 16, "started_at': "...", "preview": "hello cyphra"}]}`
 
 ## Testing
 

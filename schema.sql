@@ -5,7 +5,11 @@ CREATE TABLE users(
     id SERIAL PRIMARY KEY,
 	username VARCHAR(50) UNIQUE NOT NULL,
 	email VARCHAR(255)UNIQUE NOT NULL,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	password_hash TEXT NOT NULL DEFAULT '',
+	verification_code VARCHAR(6),
+	code_expires_at TIMESTAMP(0),
+	is_verified BOOLEAN DEFAULT FALSE
 );
 CREATE TABLE conversations(
 	id SERIAL PRIMARY KEY,
@@ -21,7 +25,3 @@ CREATE TABLE messages(
 	created_at TIMESTAMP DEFAULT CURRENT_TIMES
 	
 );
-DELETE FROM users;
-SELECT username, verification_code, code_expires_at, is_verified FROM users WHERE username = 'cypher';
-
-ALTER TABLE users ALTER COLUMN code_expires_at TYPE TIMESTAMP(0);
