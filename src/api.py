@@ -6,10 +6,22 @@ from src.database import *
 from src.auth import *
 from src.mail_service import *
 from datetime import datetime, timezone
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+
+)
 bot = Chatbot("Cyphra")
 
 #creates a chat request endpoint
