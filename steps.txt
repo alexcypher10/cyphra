@@ -12,7 +12,7 @@ PHASE 1: ROBUST API HANDLING
 [ ] Add try/except around all API calls (network errors, timeouts, bad responses)
 [ ] Handle rate limits / retries with backoff
 [ ] Validate API response before using it
-[ ] Log errors instead of just printing
+[X] Log errors instead of just printing
 STATUS: NOT STARTED (no API calls exist yet — blocked on Phase 7)
 NOTE: try/except + logging were built, but for the CLI input loop, not an API
 
@@ -33,22 +33,22 @@ STATUS: DONE
 PHASE 4: CONVERSATION HISTORY STORAGE
 [X] Save each message (user + bot) to DB
 [X] Load past conversation on session start
-[ ] Implement basic memory retrieval (last N messages)
-STATUS: NOT STARTED
+[X] Implement basic memory retrieval (last N messages)
+STATUS: DONE
 
 PHASE 5: REST API LAYER (Flask or FastAPI)
 [X] Design endpoints: /chat, /history, /users
 [X] Wire chatbot engine into API routes
 [X] Test endpoints with Postman/curl
-STATUS: NOT STARTED
+STATUS: DONE
 
 PHASE 6: AUTHENTICATION
 [X] User registration/login
 [X] Password hashing (bcrypt)
 [X] JWT-based session auth
-[ ] Protect /history 
+[X] Protect /history 
 [ ] Google OAuth login
-[ ] Email verrification
+[X] Email verrification
 STATUS: NOT STARTED
 
 PHASE 7: LLM INTEGRATION

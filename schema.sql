@@ -11,6 +11,7 @@ CREATE TABLE users(
 	code_expires_at TIMESTAMP(0),
 	is_verified BOOLEAN DEFAULT FALSE
 );
+
 CREATE TABLE conversations(
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users(id),

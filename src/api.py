@@ -107,7 +107,7 @@ def login(request: loginRequest):
         raise HTTPException(status_code=401, detail="invalid username or password")
 
     if not is_verified:
-        raise HTTPException(status_code=403, detail="please veridy your email first")
+        raise HTTPException(status_code=403, detail="please verify your email first")
     
     token = create_access_token(user_id)
 
@@ -147,4 +147,38 @@ def list_conversations(user_id: int = Depends(get_current_user)):
     return{
         "conversations": [{"id": r[0], "started_at": r[1], "preview": r[2]}
         for r in rows]
+    }
+
+class ResendRequest (BaseModel):
+    username: str
+
+@app.post("/resend-code")
+def resend_code (request: ResendRequest):
+    user = get_user_by_username(request.username)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user_id, password_hash, verification_code, code_expires_at, is_verified = user
+    if is_verified:
+        return {"message": "Account already verified"}
+
+    code = generate_verification_code()
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
+    send_verification_code(user_id, code, expires_at)
+
+    email = get_user_email(user_id)
+    send_verification_email(email, code )
+
+    return {"message": "A new verification code has been sent. "}
+
+@app.get("/me")
+def me(user_id: int = Depends(get_current_user)):
+    profile = get_user_profile(user_id)
+    if not profile:
+        raise HTTPException(status_code=404, detail="User not found")
+    return{
+        "id": profile[0],
+        "username": profile[1],
+        "email": profile[2],
+        "is_verified": profile[3],
     }

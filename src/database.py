@@ -143,11 +143,34 @@ def get_user_conversations(user_id):
     conn.close()
     return results
 
+def get_user_email(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT email from users WHERE id = %s",
+        (user_id,)
+    )
+    result = cur.fetchone()
+    cur.close()
+    conn.close()
+    return result[0] if result else None
+
+def get_user_profile(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT id, username, email, is_verified FROM users WHERE id = %s", (user_id,)
+    )
+    result = cur.fetchone()
+    cur.close()
+    conn.close()
+    return result
+
 def hash_password(password):
     # stores user password in hashed format 
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     return hashed.decode('utf-8')
-
 
 def check_password(password, hashed_password):
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
